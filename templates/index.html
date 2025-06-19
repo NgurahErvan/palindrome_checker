@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Palindrome Checker</title>
+    <style>
+      /* --- CSS styles as you provided --- */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 100%;
+        backdrop-filter: blur(10px);
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 2.5em;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .input-section {
+        margin-bottom: 30px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+        color: #555;
+        font-weight: 600;
+        font-size: 1.1em;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        font-size: 1.1em;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      input[type="text"]:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        flex: 1;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 120px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+      }
+
+      .btn-secondary {
+        background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+        color: #333;
+      }
+
+      .btn-danger {
+        background: linear-gradient(45deg, #fd79a8, #fdcb6e);
+        color: white;
+      }
+
+      button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .results {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 15px;
+        padding: 25px;
+        margin-top: 25px;
+        border-left: 5px solid #667eea;
+      }
+
+      .result-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .result-item:last-child {
+        border-bottom: none;
+      }
+
+      .result-label {
+        font-weight: 600;
+        color: #555;
+        flex: 1;
+      }
+
+      .result-value {
+        font-weight: bold;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        min-width: 80px;
+        text-align: center;
+      }
+
+      .result-true {
+        background: linear-gradient(45deg, #00b894, #00cec9);
+        color: white;
+      }
+
+      .result-false {
+        background: linear-gradient(45deg, #e17055, #fd79a8);
+        color: white;
+      }
+
+      .final-result {
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+
+      .final-result.palindrome {
+        background: linear-gradient(45deg, #00b894, #00cec9);
+        color: white;
+      }
+
+      .final-result.not-palindrome {
+        background: linear-gradient(45deg, #e17055, #fd79a8);
+        color: white;
+      }
+
+      .cleaned-text {
+        background: rgba(102, 126, 234, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 15px 0;
+        border-left: 4px solid #667eea;
+      }
+
+      .cleaned-text strong {
+        color: #667eea;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 2em;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔄 Palindrome Checker</h1>
+
+      <form method="POST">
+        <div class="input-section">
+          <label for="textInput">Enter text to check:</label>
+          <input
+            type="text"
+            id="textInput"
+            name="textInput"
+            placeholder="Type something like 'A man, a plan, a canal: Panama'"
+            maxlength="200"
+            value="{{ result.original if result }}"
+          />
+        </div>
+
+        <div class="button-group">
+          <button type="submit" class="btn-primary">Check Palindrome</button>
+          <button
+            type="button"
+            class="btn-danger"
+            onclick="window.location.href='/'"
+          >
+            Clear
+          </button>
+        </div>
+      </form>
+
+      {% if result %}
+      <div class="results">
+        <div class="cleaned-text">
+          <strong>Original:</strong> "{{ result.original }}"<br />
+          <strong>Cleaned:</strong> "{{ result.cleaned }}"
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">Basic Method (Exact match)</span>
+          <span
+            class="result-value {{ 'result-true' if result.basic else 'result-false' }}"
+          >
+            {{ '✓ TRUE' if result.basic else '✗ FALSE' }}
+          </span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">Clean Method (Ignore case/punct)</span>
+          <span
+            class="result-value {{ 'result-true' if result.clean else 'result-false' }}"
+          >
+            {{ '✓ TRUE' if result.clean else '✗ FALSE' }}
+          </span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">Iterative Method</span>
+          <span
+            class="result-value {{ 'result-true' if result.iterative else 'result-false' }}"
+          >
+            {{ '✓ TRUE' if result.iterative else '✗ FALSE' }}
+          </span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">Recursive Method</span>
+          <span
+            class="result-value {{ 'result-true' if result.recursive else 'result-false' }}"
+          >
+            {{ '✓ TRUE' if result.recursive else '✗ FALSE' }}
+          </span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">Automata Method</span>
+           <span
+             class="result-value {{ 'result-true' if result.automata else 'result-false' }}"
+          >
+          {{ '✓ TRUE' if result.automata else '✗ FALSE' }}
+        </span>
+        </div>
+
+        <div
+          class="final-result {{ 'palindrome' if result.clean else 'not-palindrome' }}"
+        >
+          {{ "🎉 IT'S A PALINDROME!" if result.clean else "❌ NOT A PALINDROME"
+          }}
+          <br /><small>(Based on clean method)</small>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
